@@ -58,7 +58,18 @@ def twitter_mentions(list_tasks):
 		access_token_secret = 'VWfcQFESQrO3MA4MpbBFVOIBvAJT3p1Bu5eceqL6zEsD3')
 
 	# verify if credentials are successful
-	print(api.VerifyCredentials())
+	#print(api.VerifyCredentials())
+	# print tweets from specified user
+	#statuses = api.GetUserTimeline(screen_name='salasberryfin')
+	#print([s.text for s in statuses])
+
+	# checking for mentions containing the str_task string
+	str_task = "#Manada"
+	mentions = api.GetMentions()
+	for mention in mentions:
+		if str_task in mention.text:
+			print mention.text
+
 
 
 # manager method
