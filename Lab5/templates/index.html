@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo list manager</title>
+</head>
+<body>
+<h1>Welcome to the Todo List Manager</h1>
+
+
+<p>
+  {% for element in tasks %}
+  {{ element[1] }}
+  <form action="{{ url_for('delete_task', task = element[0]) }}" method="post">
+    <input type="submit" value="Delete task">
+  </form>
+  <br>
+  {% endfor %}
+</p>
+
+<p>
+    <form action="{{ url_for('add_task') }}" method="post">
+      <input type="text" name="taskname" placeholder="name of new task">
+      <input type="checkbox" name="urg" id="id" value="Urgent">Urgent
+        <input type="submit" value="Add new task">
+    </form>
+<br>
+</p>
+
+</body>
+</html>
