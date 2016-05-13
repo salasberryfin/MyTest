@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <![endif]-->
+    <title>Your safe Sun</title>
+    <!-- BOOTSTRAP CORE STYLE CSS -->
+    <link href="stylesheets/bootstrap.css" rel="stylesheet" />
+     <!-- FONTAWESOME STYLE CSS -->
+     <link href="stylesheets/font-awesome.css" rel="stylesheet" />
+    <!-- CUSTOM STYLE CSS -->
+    <link href="stylesheets/style.css" rel="stylesheet" />
+</head>
+<body>
+    Your Safe Sun API - Welcome {{ user_name }}!
+    <br><br>
+
+
+<!-- CITY SECTION STARTS (only for logged users) -->
+
+{% if log %}
+    <p>
+        <form action="{{ url_for('city') }}" method="post">
+          <input type="text" name="cityname" placeholder="select your city">
+            <input type="submit" value="Select city">
+        </form>
+</p>
+
+<p>
+    <form action="{{ url_for('log_out') }}" method="post">
+        <input type="submit" value="Log out">
+    </form>
+</p>
+
+{% endif %}
+
+<!-- CITY SECTION ENDS (only for logged users) -->
+
+<!-- NO USER SECTION STARTS -->
+
+{% if not log %}
+In order to use the application you must be logged in.
+
+<!-- FLASH SECTION STARTS -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+{% block body %}{% endblock %}
+<!-- FLASH SECTION ENDS -->
+
+<p>
+    <form action="{{ url_for('login') }}" method="post">
+      <input type="text" name="username" placeholder="Username">
+      <input required = "true" type="password" name="pswd" placeholder="Password">
+        <input type="submit" value="Log in">
+    </form>
+</p>
+
+<p>
+    <form action="{{ url_for('registration') }}" method="post">
+      <input type="text" name="username" placeholder="Username">
+      <input required = "true" type="password" name="pwd" placeholder="Password">
+      <input required = "true" type="password" name="pwd2" placeholder="Repeat Password">
+        <input type="submit" value="Sign in">
+    </form>
+</p>
+{% endif %}
+
+<!-- NO USER SECTION ENDS -->
+
+</body>
+</html>
