@@ -1,0 +1,184 @@
+< HEAD
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <![endif]-->
+    <title>Your safe Sun</title>
+    <!-- BOOTSTRAP CORE STYLE CSS -->
+    <link href="static/bootstrap.css" rel="stylesheet" />
+     <!-- FONTAWESOME STYLE CSS -->
+     <link href="static/font-awesome.css" rel="stylesheet" />
+    <!-- CUSTOM STYLE CSS -->
+    <link href="static/style.css" rel="stylesheet" />
+</head>
+<body >
+
+        <div class="navbar navbar-inverse navbar-fixed-top " >
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" ><strong style=""></strong> Ys<i class="fa fa-sun-o"></i>Sun app manager</a>
+            </div>
+            <div class="navbar-collapse collapse move-me">
+                <ul class="nav navbar-nav navbar-right set-links">
+                     <li><a href="/">Home</a></li>
+		{% if log %}
+                     <li><a class="active-menu-item">Configuration</a></li>
+		{% endif %}
+		{% if not log %}
+		     <li><a class="active-menu-item">Register</a>
+		{% endif %}
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <!--MENU SECTION END-->
+
+    <!--HOME SECTION END-->
+    <br><section>
+        <div class="container">
+
+
+
+
+Your Safe Sun API - Welcome {{ user_name }}!
+    <br><br>
+
+
+
+{% if log %}
+    <p>
+    <form action="{{ url_for('setconfig') }}" method="post">
+	Set Notifications to:
+		<br><li>1. No notifications</li>
+		<br><li>2. Notify when temperature or humidity are higher than threshold</li>
+		<br><li>3. All notifications (temp+hum+latitude risks+max UV for day)</li>
+      		<br><input required = "true" type="text" name="notifications" placeholder="Enter 1, 2 or 3"><br>
+	Set Protection Level to:
+		<br>1. Only fan.
+		<br>2. Fan+Parasol.
+	      <br><input required = "true" type="text" name="protection" placeholder="Enter 1 or 2"><br>
+	Set Thresholds:
+		<br>Humidity (%).
+			<input required = "true" type="text" name="humidity" placeholder="max. 100%"><br>
+		<br>Temperature (ºC).
+		      <input required = "true" type="text" name="temperature" placeholder="Celsius"><br>
+
+
+        <input type="submit" value="Update Configuration">
+    </form>
+	</p>
+
+{% endif %}
+
+
+
+<!-- NO USER SECTION STARTS -->
+
+{% if not log %}
+.
+
+In order to use the application you must be logged in.
+
+<!-- FLASH SECTION STARTS -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+{% block body %}{% endblock %}
+<!-- FLASH SECTION ENDS -->
+
+<p>
+    <form action="{{ url_for('login') }}" method="post">
+      <input type="text" name="username" placeholder="Username">
+      <input required = "true" type="password" name="pswd" placeholder="Password">
+        <input type="submit" value="Log in">
+    </form>
+</p>
+
+
+    
+{% endif %}
+
+<!-- NO USER SECTION ENDS -->
+
+
+
+
+    </section>
+    <section id="footer-sec" >
+        <div class="container">
+            <div class="row">
+<div class="col-md-4">
+   <h4>ABOUT COMPANY</h4>
+    <p style="padding-right:50px;">
+        <span style="font-weight:bold">Y<i class="fa fa-sun-o"></i>ur safe Sun</span> is part of the Ambient Intelligence course from Politecnico di Torino (2016). To know more about the course and its projects <a target="_blank" href="http://elite.polito.it/index.php/teaching/current-courses/196-01qzp-ami">Ambient Intelligence - Polito</a>
+    </p>
+</div>
+
+<!-- FOOTER SECTION STARTS -->
+                <div class="col-md-4">
+       <h4>LOCATION </h4>
+                    <h5>Politecnico di Torino</h5>
+                     <h5>Torino, <strong>Italy</strong></h5>
+                    <br />
+                    <h5><strong>Visit us: </strong><a href="http://ami-2016.github.io/YsSun/" > Your safe Sun</a>  </h5>
+
+</div>
+                <div class="col-md-4">
+      <h4>SOCIAL LINKS</h4>
+                    <div class="social-links">
+
+
+                    <a target="_blank" href="https://www.facebook.com/groups/polito.ami/" > <i class="fa fa-facebook fa-2x" ></i></a>
+                         <a target="_blank" href="https://twitter.com/AmI_course" > <i class="fa fa-twitter fa-2x" ></i></a>
+                         <a target="_blank" href="https://github.com/AmI-2016" > <i class="fa fa-github fa-2x" ></i></a>
+                   </div>
+
+</div>
+
+            </div>
+
+        </div>
+    </section>
+
+     <!--FOOTER SECTION END-->
+
+    <div class="copy-txt">
+         <div class="container">
+        <div class="row">
+<div class="col-md-12 set-foot" >
+    &copy 2016 Template based on: <a href="http://www.binarytheme.com" target="_blank" style="color:#7C7C7C;">binarytheme.com</a>
+</div>
+            </div>
+                   </div>
+    </div>
+
+     <!-- COPY TEXT SECTION END-->
+    <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
+    <!-- CORE JQUERY  -->
+    <script src="javascripts/jquery-1.11.1.js"></script>
+    <!-- BOOTSTRAP SCRIPTS  -->
+    <script src="javascripts/js/bootstrap.js"></script>
+    <!-- CUSTOM SCRIPTS  -->
+    <script src="javascripts/js/custom.js"></script>
+</body>
+</html>

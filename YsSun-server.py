@@ -16,7 +16,7 @@ app.secret_key = 'some_secret'
 @app.route('/', methods = ['GET', 'POST'])
 def home():
 	print log
-	return render_template('weather.html', log=log, user_name=user_name)
+	return render_template('index.html', log=log, user_name=user_name)
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -55,6 +55,39 @@ def log_out():
 	flash ('You were succesfully logged out!')
 	return redirect(url_for('home'))
 
+@app.route('/config')
+def config():
+	return render_template('config.html', log=log, user_name=user_name)
+
+@app.route('/setconfig', methods = ['POST'])
+def setconfig():
+	if request.method == 'POST':
+		notification = request.form['notifications']
+		protection = request.form['protection']
+		temperature = request.form['temperature']
+		humidity = request.form['humidity']
+		# store configuration in CONFIG table (Data-YsSun.db)
+		conn = sqlite3.connect('Data-YsSun.db')
+		c = conn.cursor()
+
+		# check if USER already has a CONFIG
+		c.execute('SELECT * FROM CONFIG where name=?', (user_name, ))
+		# check if there's CONFIG for the USER
+		if c.fetchone() != None:
+			# update CONFIG for USER
+			c.execute('UPDATE CONFIG SET NOTIFICATIONS=?,PROTECTION=?,HUMIDITY=?,TEMPERATURE=? WHERE NAME=?', (notification, protection, humidity, temperature, user_name))
+		else:
+			c.execute('INSERT INTO CONFIG(NOTIFICATIONS, PROTECTION, HUMIDITY, TEMPERATURE, NAME) VALUES (?,?,?,?,?)', (notification, protection, humidity, temperature, user_name))
+
+		conn.commit()
+		conn.close()
+
+		flash("Succesfully configured")
+	return redirect(url_for('home'))
+
+@app.route('/reg-form')
+def regform():
+	return render_template('reg-form.html', log=log, user_name=user_name)
 
 
 @app.route('/registration', methods = ['POST'])
@@ -82,6 +115,48 @@ def registration():
 		else:
 			conn.close()
 			return "Passwords did not match. Try again!"
+
+
+# START CONSOLE APPLICATION (sensors)
+@app.route('/startapp', methods = ['POST'])
+def startapp():
+	conn = sqlite3.connect('Data-YsSun.db')
+	c = conn.cursor()
+	c.execute('SELECT * FROM CONFIG where name=?', (user_name, ))
+	# if not logged in as USER, back to home
+	if user_name == 'Guest':
+		return redirect(url_for('home'))
+
+	# check if there's CONFIG for the USER
+	if c.fetchone() != None:
+
+		for user_conf in c.execute('SELECT * FROM CONFIG where name=?', (user_name, )):
+			# show CONFIG in console
+			print "Welcome " + user_name + ", your configuration is shown below"
+			notif = user_conf[0]
+			protect = user_conf[1]
+			hum = user_conf[2]
+			temp = user_conf[3]
+			print "NOTIFICATIONS: %s\nPROTECTION: %s\nHUMIDITY: %s\nTEMPERATURE:%s" % (notif, protect, hum, temp)
+
+
+		##############################################
+		##############################################
+		##############################################
+		################CODE TO START#################
+		##############################################
+		##############################################
+		##############################################
+
+		return render_template('startapp.html', log=log, user_name=user_name)
+
+
+
+	# If there's no CONFIG for the USER -> force to CONFIG
+	else:
+		return render_template('config.html', log=log, user_name=user_name)
+
+
 
 @app.route('/city', methods = ['POST'])
 def city():

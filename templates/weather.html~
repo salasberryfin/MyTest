@@ -71,7 +71,7 @@ In order to use the application you must be logged in.
 </p>
 
 <p>
-    <a href="/reg-form">Register</a>
+    <a href="/reg-form.html">Register</a>
 </p>
 {% endif %}
 
