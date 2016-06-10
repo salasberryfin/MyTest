@@ -1,3 +1,4 @@
+< HEAD
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -28,17 +29,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/" ><strong style=""></strong> Ys<i class="fa fa-sun-o"></i>Sun app manager</a>
+                <a class="navbar-brand" href="/" ><strong style=""></strong> Ys<i class="fa fa-sun-o"></i>Sun <small>app manager</small></a>
             </div>
             <div class="navbar-collapse collapse move-me">
                 <ul class="nav navbar-nav navbar-right set-links">
-                     <li><a href="/">Home</a></li>
+                     <li><a class="active-menu-item">Home</a></li>
+        {% if user_name != 'Doctor' %}
 		{% if log %}
-                     <li><a class="active-menu-item">Application</a></li>
+                     <li><a href="/config">Configuration</a></li>
 		{% endif %}
 		{% if not log %}
-		     <li><a class="active-menu-item">Register</a>
+		     <li><a href="/reg-form">Register</a>
 		{% endif %}
+        {% endif %}
                 </ul>
             </div>
 
@@ -53,57 +56,53 @@
 
 
 
-Your Safe Sun API - Welcome {{ user_name }}!
+Your Safe Sun API - Registration
     <br><br>
 
 
 
+
+
+<!-- USER SECTION STARTS (only for logged users) -->
+
 {% if log %}
-    <p> Your app will start running on the console, where you can also check your configuration.
-	</p>
+
+    You're already logged in as a user!<br>
+
 <p>
-    <form action="{{ url_for('stopsensors') }}" method="post">
-        <input type="submit" value="Stop Sensors">
+    <form action="{{ url_for('home') }}" method="post">
+        <input type="submit" value="Go back">
     </form>
 </p>
 
-
 {% endif %}
 
+<!-- CITY SECTION ENDS (only for logged users) -->
 
 
 <!-- NO USER SECTION STARTS -->
 
 {% if not log %}
-.
-
-In order to use the application you must be logged in.
-
-<!-- FLASH SECTION STARTS -->
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-{% block body %}{% endblock %}
-<!-- FLASH SECTION ENDS -->
+{% if registration == 1 %}
+You were succesfully registered!
 
 <p>
-    <form action="{{ url_for('login') }}" method="post">
-      <input type="text" name="username" placeholder="Username">
-      <input required = "true" type="password" name="pswd" placeholder="Password">
-        <input type="submit" value="Log in">
+    <form action="{{ url_for('home') }}" method="post">
+        <input type="submit" value="Home">
     </form>
 </p>
 
+{% else %}
 
+Invalid registration parameters, try again!
 
+<p>
+    <form action="{{ url_for('home') }}" method="post">
+        <input type="submit" value="Home">
+    </form>
+</p>
 {% endif %}
-
+{% endif %}
 <!-- NO USER SECTION ENDS -->
 
 

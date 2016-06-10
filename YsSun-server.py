@@ -16,6 +16,8 @@ import sqlite3
 user_name = 'Guest'
 log = 0
 
+physicians = {'Doctor'}
+
 # Flask app
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -119,11 +121,14 @@ def registration():
 			c.execute('INSERT INTO USER (ID, NAME, PASSWORD) VALUES (?, ?, ?)', (None, username, password))
 			conn.commit()
 			conn.close()
-			return "Succesfully registered. You can now log in from the home page."
+			#return "Succesfully registered. You can now log in from the home page."
+			registration = 1
+			return render_template('register.html', registration = registration, log=log, user_name=user_name)
 		else:
 			conn.close()
-			return "Passwords did not match. Try again!"
-
+			registration = 0
+			#return "Passwords did not match. Try again!"
+			return render_template('register.html', registration = registration, log=log, user_name=user_name)
 
 # START CONSOLE APPLICATION (sensors)
 @app.route('/startapp', methods = ['POST'])
@@ -173,7 +178,7 @@ def startthread(status):
                 t.start()
         else:
 		t.terminate()
-		
+
 @app.route('/startsensors', methods = ['POST'])
 def startsensors():
         return testloop(True, user_name)
@@ -181,6 +186,15 @@ def startsensors():
 def stopsensors():
         startthread(0)
         return redirect(url_for('home'))
+
+@app.route('/patients_status', methods = ['POST'])
+def patients_status():
+	conn = sqlite3.connect('Data-YsSun.db')
+	c = conn.cursor()
+	for user_hist in c.execute('SELECT * FROM HISTORY'):
+		print user_hist
+	flash("Patients' info is shown on console")
+	return redirect(url_for('home'))
 
 
 @app.route('/city', methods = ['POST'])

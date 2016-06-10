@@ -1,4 +1,3 @@
-< HEAD
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -34,12 +33,14 @@
             <div class="navbar-collapse collapse move-me">
                 <ul class="nav navbar-nav navbar-right set-links">
                      <li><a class="active-menu-item">Home</a></li>
+        {% if user_name != 'Doctor' %}
 		{% if log %}
                      <li><a href="/config">Configuration</a></li>
 		{% endif %}
 		{% if not log %}
 		     <li><a href="/reg-form">Register</a>
 		{% endif %}
+        {% endif %}
                 </ul>
             </div>
 
@@ -57,6 +58,36 @@
 Your Safe Sun API - Welcome {{ user_name }}!
     <br><br>
 
+
+    <!-- FLASH SECTION STARTS -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block body %}{% endblock %}
+    <!-- FLASH SECTION ENDS -->
+
+
+
+
+{% if user_name == 'Doctor' %}
+<p>
+    <form action="{{ url_for('patients_status') }}" method="post">
+        <input type="submit" value="Activate physician's console app">
+</form>
+</p>
+<p>
+    <form action="{{ url_for('log_out') }}" method="post">
+        <input type="submit" value="Log out">
+    </form>
+</p>
+
+{% else %}
 
 <!-- USER SECTION STARTS (only for logged users) -->
 
@@ -84,23 +115,13 @@ Your Safe Sun API - Welcome {{ user_name }}!
 
 <!-- CITY SECTION ENDS (only for logged users) -->
 
+
 <!-- NO USER SECTION STARTS -->
 
 {% if not log %}
 In order to use the application you must be logged in.
 
-<!-- FLASH SECTION STARTS -->
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-{% block body %}{% endblock %}
-<!-- FLASH SECTION ENDS -->
+
 
 <p>
     <form action="{{ url_for('login') }}" method="post">
@@ -112,7 +133,7 @@ In order to use the application you must be logged in.
 
 
 {% endif %}
-
+{% endif %}
 <!-- NO USER SECTION ENDS -->
 
 
