@@ -1,6 +1,14 @@
 from flask import Flask, flash, render_template, request, redirect, url_for
 import httplib2, requests, json
+# for processing the app's infinite loop
+import multiprocessing
+from multiprocessing import Process
 from YsSunapi import getWeatherApi, getCityCoordinates
+#from Sensorread import sensing
+###
+from testinfiniteloop import testloop
+###
+
 # sqlite3
 import sqlite3
 
@@ -133,11 +141,11 @@ def startapp():
 		for user_conf in c.execute('SELECT * FROM CONFIG where name=?', (user_name, )):
 			# show CONFIG in console
 			print "Welcome " + user_name + ", your configuration is shown below"
-			notif = user_conf[0]
-			protect = user_conf[1]
-			hum = user_conf[2]
-			temp = user_conf[3]
-			print "NOTIFICATIONS: %s\nPROTECTION: %s\nHUMIDITY: %s\nTEMPERATURE:%s" % (notif, protect, hum, temp)
+			#notif = user_conf[0]
+			#protect = user_conf[1]
+			#hum = user_conf[2]
+			#temp = user_conf[3]
+			#print "NOTIFICATIONS: %s\nPROTECTION: %s\nHUMIDITY: %s\nTEMPERATURE:%s" % (notif, protect, hum, temp)
 
 
 		##############################################
@@ -147,7 +155,8 @@ def startapp():
 		##############################################
 		##############################################
 		##############################################
-
+                #startthread(1)
+		startthread(1)
 		return render_template('startapp.html', log=log, user_name=user_name)
 
 
@@ -156,6 +165,22 @@ def startapp():
 	else:
 		return render_template('config.html', log=log, user_name=user_name)
 
+# method starts the new process (sensing) or stops it when clicking button from /startapp
+def startthread(status):
+        if status == 1:
+                global t
+                t = multiprocessing.Process(target=startsensors)
+                t.start()
+        else:
+		t.terminate()
+		
+@app.route('/startsensors', methods = ['POST'])
+def startsensors():
+        return testloop(True, user_name)
+@app.route('/stopsensors', methods = ['POST'])
+def stopsensors():
+        startthread(0)
+        return redirect(url_for('home'))
 
 
 @app.route('/city', methods = ['POST'])

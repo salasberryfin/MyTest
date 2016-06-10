@@ -64,9 +64,9 @@ Your Safe Sun API - Welcome {{ user_name }}!
 
 <p>
     <form action="{{ url_for('startapp') }}" method="post">
-        <input type="submit" value="Start the console application!"
-</p>
-<br><br><p>
+        <input type="submit" value="Start the console application!">
+</form>
+</p><br><p>
     To receive extra information about a certain city<br>
     <form action="{{ url_for('city') }}" method="post">
       <input type="text" name="cityname" placeholder="select your city">

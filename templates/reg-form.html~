@@ -29,16 +29,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#" ><strong style=""></strong> Ys<i class="fa fa-sun-o"></i>Sun app manager</a>
+                <a class="navbar-brand" href="/" ><strong style=""></strong> Ys<i class="fa fa-sun-o"></i>Sun app manager</a>
             </div>
             <div class="navbar-collapse collapse move-me">
                 <ul class="nav navbar-nav navbar-right set-links">
-                     <li><a class="active-menu-item">Home</a></li>
+                     <li><a href="/">Home</a></li>
 		{% if log %}
-                     <li><a href="vision.html">Configuration</a></li>
+                     <li><a href="/config">Configuration</a></li>
 		{% endif %}
 		{% if not log %}
-		     <li><a href="/reg-form">Register</a>
+		     <li><a class="active-menu-item">Register</a>
 		{% endif %}
                 </ul>
             </div>
@@ -85,7 +85,9 @@ Create your account to access the app.
     </form>
 </p>
 
-    
+	<a href="/">Cancel</a>
+
+
 {% endif %}
 
 <!-- NO USER SECTION ENDS -->
